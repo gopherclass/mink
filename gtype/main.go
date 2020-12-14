@@ -1,8 +1,9 @@
 package gtype
 
-//gtypes of ginq
+//gtypes of mink
 const (
 	Slice = iota
 	Maps
 	Str
+	Generator
 )
