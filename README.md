@@ -1,0 +1,2 @@
+# ginq
+golang integrated query
