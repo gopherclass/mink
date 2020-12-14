@@ -1,2 +1,3 @@
-# ginq
-golang integrated query
+# mink
+
+query in golang
