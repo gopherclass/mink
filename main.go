@@ -2,7 +2,6 @@ package mink
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
 	"time"
 
@@ -28,35 +27,23 @@ type Mink struct {
 //From ... from slice or string to Mink
 func From(t interface{}) Mink {
 	g := Mink{str: "", slice: nil, maps: nil, err: nil, typ: 0}
-	typ := reflect.TypeOf(t).Kind()
-	if !(typ == reflect.Slice || typ == reflect.String || typ == reflect.Map) {
-		g.err = fmt.Errorf("%v: From: parameter is invaild type", time.Now())
+
+	if v, ok := t.([]Element); ok {
+		g.slice = v
+		g.typ = gtype.Slice
 		return g
 	}
-	switch typ {
-	case reflect.String:
-		v, ok := t.(string)
-		if !ok {
-			g.err = fmt.Errorf("%v: From: parameter is not vaild string", time.Now())
-		}
-		g.typ = gtype.Str
-		g.str = v
-	case reflect.Slice:
-		v, ok := t.([]Element)
-		if !ok {
-			g.err = fmt.Errorf("%v: From: parameter is not vaild slice", time.Now())
-		}
-		g.typ = gtype.Slice
-		g.slice = v
-	case reflect.Map:
-		v, ok := t.(map[Element]Element)
-		if !ok {
-			g.err = fmt.Errorf("%v: From: parameter is not vaild map", time.Now())
-		}
-		g.typ = gtype.Maps
+	if v, ok := t.(map[Element]Element); ok {
 		g.maps = v
-
+		g.typ = gtype.Maps
+		return g
 	}
+	if v, ok := t.(string); ok {
+		g.str = v
+		g.typ = gtype.Str
+		return g
+	}
+	g.err = fmt.Errorf("%v: From: parameter is invalid", time.Now())
 	return g
 }
 
